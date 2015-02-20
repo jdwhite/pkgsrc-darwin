@@ -81,11 +81,10 @@ rc.d/mountcritremote
 >NOTE: The included ```rc.d/NETWORKING``` has been heavily modified from the original NetBSD version to wait for one or more network interfaces to have an IP address assigned to it (or 60 seconds elapses) before proceeding with the rc.pkgsrc startup. This was added to help ensure that the network interfaces were properly configured so that applications that bound to them would not have to be restarted after the interface was configured post application startup.
 >**The command ```ipconfig waitall```, while claiming to provide this exact functionality, does NOT work as advertised. Additionally, the man page discourages use of ```ipconfig``` for anything other than testing/debugging indicating that it's deprecated.**
 
-To take advantage of this functionality, add the following to 
-```rc.conf```:
+To take advantage of this functionality, add the following to ```rc.conf```:
 
 ```
-  NETWORKING_flags="en0 en6"
+    NETWORKING_flags="en0 en6"
 ```
 
 Replace *en0 en6* with the network interface names appropriate to your installation.
@@ -95,6 +94,7 @@ Replace *en0 en6* with the network interface names appropriate to your installat
 To launch rc.pkgsrc at boot
 
 * Copy ```org.pkgsrc.rc.plist``` (shown below) from the ```LaunchDaemons``` directory to ```/Library/LaunchDaemons/```.
+
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
@@ -132,12 +132,14 @@ curl -# -o /usr/pkg/pkgdb/pkg-vulnerabilities \
 ## Other Notes
 
 * ```net/hesiod/Makefile```; add:
+
 ```LDFLAGS.Darwin+=        -lresolv```
 
 * Since Mavericks, OS X doesn't come with ```cvs```, so build ```devel/scmcvs```.
 
 * ```net/xymon``` needs additional shared memory segments. Create 
   ```/etc/sysctl.conf``` and add the lines:
+
 ```
     kern.sysv.shmmax=16777216
     kern.sysv.shmmni=128
