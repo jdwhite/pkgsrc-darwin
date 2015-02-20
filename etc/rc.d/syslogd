@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# PROVIDE: syslogd
+
+# This is a dummy dependency for services which require a syslogd dependancy.

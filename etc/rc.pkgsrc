@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# rc.pkgsrc - a pkgsrc startup script.
+#
+# Jason White <jdwhite@menelos.com>
+# 24-Dec-2013
+#
+# For use as a launchd User Daemon on Darwin.
+#
+
+(
+export HOME=/
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/pkg/sbin:/usr/pkg/bin
+umask 022
+
+_rc_subr_path=/usr/pkg/etc/rc.subr
+_rc_conf_path=/usr/pkg/etc/rc.conf
+
+# I stick these in /usr/pkg and create symlinks to them in /etc.
+. ${_rc_subr_path}
+. ${_rc_conf_path}
+_rc_conf_loaded=true
+
+if ! checkyesno rc_configured; then
+	echo "${_rc_conf_path} is not configured.  Pkgsrc startup aborted."
+	exit 1
+fi
+
+# For compatability -- some scripts expect these to be set.
+autoboot=yes
+rc_fast=yes     # run_rc_command(): do fast booting
+
+stty status '^T'
+
+files=$(rcorder -s nostart ${rc_rcorder_flags} /usr/pkg/etc/rc.d/*)
+
+for _rc_elem in $files; do
+	run_rc_script $_rc_elem start
+done
+) | logger -t rc.pkgsrc 2>&1
+
+exit 0

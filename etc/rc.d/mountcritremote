@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# PROVIDE: mountcritremote
+
+# This is a dummy dependency for services which require a mountcritremote.
+# dependency.

@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# Jason White <jdwhite@menelos.com>
+#
+# Set 'NETWORKING_flags' in rc.conf to include the list of interfaces 
+# that should have an IPv4 address before continuing with rc.pkgsrc 
+# startup. 
+
+# PROVIDE: NETWORKING NETWORK
+
+# This is a dummy dependency for services which require networking
+# to be operational before starting.
+
+$_rc_subr_loaded . /etc/rc.subr
+
+name="NETWORKING"
+start_cmd="NETWORKING_start"
+stop_cmd=":"
+
+NETWORKING_start()
+{
+	# For Darwin.
+	# Note: 'ipconfig waitall' does not work as advertised. :(
+	/usr/sbin/ipconfig setverbose 1
+	#/usr/sbin/ipconfig waitall
+
+	# Wait up to 60 seconds for each specified interface to have an IPv4
+	# address assigned.
+	for IF in $rc_flags ; do
+		v4addr=""
+		slept=0
+		until [ "x$v4addr" != "x" ]; do
+			v4addr=$(/sbin/ifconfig $IF | egrep '^\s+inet ' | cut -f 2 -d ' ')
+			if [ "x$v4addr" = "x" ]; then
+				/usr/bin/logger -t NETWORKING ${IF}: awaiting v4 address assignment
+				sleep 5
+				slept=$((slept+5))
+			else
+				/usr/bin/logger -t NETWORKING ${IF}: v4 address is $v4addr
+			fi
+			if [ $slept -gt 59 ]; then
+				/usr/bin/logger -t NETWORKING ${IF}: timeout awaiting address assignment
+				break;
+			fi
+		done
+	done
+}
+
+load_rc_config $name
+run_rc_command "$1"
