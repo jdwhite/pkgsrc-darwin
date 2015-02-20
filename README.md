@@ -84,34 +84,16 @@ rc.d/mountcritremote
 To take advantage of this functionality, add the following to ```rc.conf```:
 
 ```
-    NETWORKING_flags="en0 en6"
+NETWORKING_flags="en0 en6"
 ```
 
 Replace *en0 en6* with the network interface names appropriate to your installation.
 
 ### Create a Launchd User Daemon.
 
-To launch rc.pkgsrc at boot
+To launch rc.pkgsrc at boot:
 
-* Copy ```org.pkgsrc.rc.plist``` (shown below) from the ```LaunchDaemons``` directory to ```/Library/LaunchDaemons/```.
-
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
-"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>Label</key>
-	<string>org.pkgsrc.rc</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>/usr/pkg/etc/rc.pkgsrc</string>
-	</array>
-	<key>RunAtLoad</key>
-	<true/>
-</dict>
-</plist>
-```
+* Copy ```LaunchDaemons/org.pkgsrc.rc.plist``` to ```/Library/LaunchDaemons/```.
 
 * Load it with:
 ```launchctl load /Library/LaunchDaemons/org.pkgsrc.rc.plist```
