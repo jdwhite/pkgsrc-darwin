@@ -59,6 +59,7 @@ PREFER.openssl=pkgsrc
 * ```mkdir /usr/pkg/var/run```
 
 >NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/usr/pkg/etc``` and created symlinks back to /etc to keep everything in ```/usr/pkg/```.  Also symlinked ```/etc/rc.d -> /usr/pkg/etc/rc.d```
+
 >**The examples in this document assume these files are in ```/usr/pkg/etc/```.**
 
 * Patch ```rc.subr``` to use ```/bin/echo``` instead of shell built-in echo.
@@ -79,6 +80,7 @@ rc.d/mountcritremote
 ```
 
 >NOTE: The included ```rc.d/NETWORKING``` has been heavily modified from the original NetBSD version to wait for one or more network interfaces to have an IP address assigned to it (or 60 seconds elapses) before proceeding with the rc.pkgsrc startup. This was added to help ensure that the network interfaces were properly configured so that applications that bound to them would not have to be restarted after the interface was configured post application startup.
+
 >**The command ```ipconfig waitall```, while claiming to provide this exact functionality, does NOT work as advertised. Additionally, the man page discourages use of ```ipconfig``` for anything other than testing/debugging indicating that it's deprecated.**
 
 To take advantage of this functionality, add the following to ```rc.conf```:
@@ -115,9 +117,9 @@ curl -# -o /usr/pkg/pkgdb/pkg-vulnerabilities \
 
 * ```net/hesiod/Makefile```; add:
 
-```LDFLAGS.Darwin+=        -lresolv```
+    ```LDFLAGS.Darwin+=        -lresolv```
 
-* Since Mavericks, OS X doesn't come with ```cvs```, so build ```devel/scmcvs```.
+* Since Mavericks, OS X doesn't come with a ```cvs``` binary. ```cvs``` is part of the ```devel/scmcvs``` package.
 
 * ```net/xymon``` needs additional shared memory segments. Create 
   ```/etc/sysctl.conf``` and add the lines:
@@ -129,4 +131,4 @@ curl -# -o /usr/pkg/pkgdb/pkg-vulnerabilities \
     kern.sysv.shmall=4096
 ```
 
-Then either reboot or load them each by hand with ```sysctl -w```.
+Then, either reboot or load them each by hand with ```sysctl -w```.
