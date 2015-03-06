@@ -63,6 +63,9 @@ PREFER.openssl=pkgsrc
 >**The examples in this document assume these files are in ```/usr/pkg/etc/```.**
 
 * Patch ```rc.subr``` to use ```/bin/echo``` instead of shell built-in echo.
+    * This issue has been submitted to the NetBSD gnats bug database as [problem report #49724](http://gnats.netbsd.org/cgi-bin/query-pr-single.pl?number=49724).
+
+
 ```
 cd /usr/pkg/etc
 patch -p0 /path_to_repo/patches/rc.subr.patch
