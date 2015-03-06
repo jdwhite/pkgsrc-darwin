@@ -125,7 +125,8 @@ On some systems, possibly those with an IPv6 addresses (probably a red herring),
 The delay in graph rendering is caused by the fontconfig library enumerating all the fonts on the system. Typically this only happens once and the font list is stored in a cache.  A persistant delay indicates that the process using the fonconfig library doesn't have permission to create the font cache and so the fontconfig library must enumerate the the fonts every time it's called.
 
 In the author's case, the process using the fontconfig library was httpd running as user _www, which does not have a writable home directory and, thus, was trying to create a ```~/.cache/fontconfig``` directory in ```/``` where it did not have write access.
-: The author chose to create ```/.cache/``` with the following permissions and ownership:
+
+The author chose to create ```/.cache/``` with the following permissions and ownership:
 ```
     drwxrwxrwx  3 root  wheel  102 Feb 16 11:51 /.cache
 ```
