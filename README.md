@@ -109,23 +109,27 @@ and re-issue the load command.
 
 ## Troubleshooting
 
-Command ```pkg_admin fetch-pkg-vulnerabilities``` hangs indefinitely.
-: On some systems, possibly those with an IPv6 addresses (probably a red herring), the ```pkg_admin fetch-pkg-vulnerabilities``` hangs.  In these cases, use curl/wget to fetch the vulnerability list via cron around 3am daily:
+### Command ```pkg_admin fetch-pkg-vulnerabilities``` hangs indefinitely.
+
+On some systems, possibly those with an IPv6 addresses (probably a red herring), the ```pkg_admin fetch-pkg-vulnerabilities``` hangs.  In these cases, use curl/wget to fetch the vulnerability list via cron around 3am daily:
 
 ```
     curl -# -o /usr/pkg/pkgdb/pkg-vulnerabilities \
 	    http://ftp.NetBSD.org/pub/NetBSD/packages/vulns/pkg-vulnerabilities.gz
 ```
 
-Large delay before graphs render when using rrdtool.
-: **Note: This isn't an issue with pkgsrc or even unique to Darwin, but since I've observed it on Darwin and it took a while to figure out the cause I'm documenting it here in the hopes it will save others valuable time.**
-: The delay in graph rendering is caused by the fontconfig library enumerating all the fonts on the system. Typically this only happens once and the font list is stored in a cache.  A persistant delay indicates that the process using the fonconfig library doesn't have permission to create the font cache and so the fontconfig library must enumerate the the fonts every time it's called.
-: In the author's case, the process using the fontconfig library was httpd running as user _www, which does not have a writable home directory and, thus, was trying to create a ```~/.cache/fontconfig``` directory in ```/``` where it did not have write access.
+### Large delay before graphs render when using rrdtool.
+
+**Note: This isn't an issue with pkgsrc or even unique to Darwin, but since I've observed it on Darwin and it took a while to figure out the cause I'm documenting it here in the hopes it will save others valuable time.**
+
+The delay in graph rendering is caused by the fontconfig library enumerating all the fonts on the system. Typically this only happens once and the font list is stored in a cache.  A persistant delay indicates that the process using the fonconfig library doesn't have permission to create the font cache and so the fontconfig library must enumerate the the fonts every time it's called.
+
+In the author's case, the process using the fontconfig library was httpd running as user _www, which does not have a writable home directory and, thus, was trying to create a ```~/.cache/fontconfig``` directory in ```/``` where it did not have write access.
 : The author chose to create ```/.cache/``` with the following permissions and ownership:
 ```
     drwxrwxrwx  3 root  wheel  102 Feb 16 11:51 /.cache
 ```
-: On the next call to the fontconfig library user _www was able to create and populate the cache directory.
+On the next call to the fontconfig library user _www was able to create and populate the cache directory.
 ```
     /.cache/fontconfig:
     total 1400
@@ -136,7 +140,7 @@ Large delay before graphs render when using rrdtool.
     -rw-r--r--  1 _www  wheel   43856 Feb 16 11:51 c94fc4589f4e4f179bb7abc5ef634560-x86_64.cache-4
 ```
 
-: Thereafter the graphs were rendered without (significant) delay.
+Thereafter the graphs were rendered without (significant) delay.
 
 ## Other Notes
 
@@ -146,8 +150,7 @@ Large delay before graphs render when using rrdtool.
 
 * Since Mavericks, OS X doesn't come with a ```cvs``` binary. ```cvs``` is part of the ```devel/scmcvs``` package.
 
-* ```net/xymon``` needs additional shared memory segments. Create 
-  ```/etc/sysctl.conf``` and add the lines:
+* ```net/xymon``` needs additional shared memory segments. Create ```/etc/sysctl.conf``` and add the lines:
 
 ```
     kern.sysv.shmmax=16777216
