@@ -54,22 +54,13 @@ PREFER.openssl=pkgsrc
 
 ### Install startup framework files
 
-* install ```pkgtools/rc.subr```
+* install ```pkgtools/rc.subr``` (rc.subr-20150510 or later)
 * install ```pkgtools/rcorder```
 * ```mkdir /usr/pkg/var/run```
 
 >NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/usr/pkg/etc``` and created symlinks back to /etc to keep everything in ```/usr/pkg/```.  Also symlinked ```/etc/rc.d -> /usr/pkg/etc/rc.d```
 
 >**The examples in this document assume these files are in ```/usr/pkg/etc/```.**
-
-* Patch ```rc.subr``` to use ```/bin/echo``` instead of shell built-in echo.
-    * This issue has been submitted to the NetBSD gnats bug database as [problem report #49724](http://gnats.netbsd.org/cgi-bin/query-pr-single.pl?number=49724).
-
-
-```
-cd /usr/pkg/etc
-patch -p0 /path_to_repo/patches/rc.subr.patch
-```
 
 * Install the scripts in this repo's ```etc``` directory to ```/usr/pkg/etc/```:
 ```
