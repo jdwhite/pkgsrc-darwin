@@ -3,46 +3,49 @@ pkgsrc-darwin
 Additional support files to aid in running pkgsrc under Darwin.
 This information has been tested under:
 
+* OS X 10.11 (El Capitan) w/ Xcode 7.0
 * OS X 10.10 (Yosemite)
 * OS X 10.9 (Mavericks)
 * OS X 10.8 (Mountain Lion)
+
+Note: with the addition of System Integrity Protection in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions have been modified to use the prefix of ```/opt```.
 
 ## Bootstrapping
 
 1. Install Xcode and start Xcode, accept license agreement, and allow it to install components. 
 2. Fetch pkgsrc.tar.xz from ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc.tar.xz
-3. Extract as root: ```tar -C /usr --xz -xf pkgsrc.tar.xz```
+3. Extract as root: ```tar -C /opt --xz -xf pkgsrc.tar.xz```
 
-I prefer to keep as much as possible in the ```/usr/pkg``` tree. If you don't, you can disregard the ```--varbase``` flag and argument.
+I prefer to keep as much as possible in the ```/opt/pkg``` tree. If you don't, you can disregard the ```--varbase``` flag and argument.
 
 Bootstrap with:
 ```
-    cd /usr/pkgsrc/bootstrap
-    ./bootstrap --compiler=clang --abi=64 --pkgdbdir=/usr/pkg/pkgdb --varbase /usr/pkg/var
+    cd /opt/pkgsrc/bootstrap
+    ./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/pkgdb --varbase /opt/pkg/var
 ```
 
 While bootstrapping:
 
 *  Create and populate ```/etc/paths.d/pkgsrc```:
 ```
-    /usr/pkg/sbin
-    /usr/pkg/bin
+    /opt/pkg/sbin
+    /opt/pkg/bin
 ```
 
 * Create and populate ```/etc/manpaths.d/pkgsrc```:
 ```
-    /usr/pkg/man
+    /opt/pkg/man
 ```
 
-* [optional] Add to ```/usr/pkg/etc/mk.conf```:
+* [optional] Add to ```/opt/pkg/etc/mk.conf```:
 ```
-# Don't forget to set 'MAKEOBJDIRPREFIX /usr/obj' in your environment with WRKOBJDIR
-#WRKOBJDIR=/usr/obj/pkg
-#PACKAGES=/usr/pkg/packages/${OPSYS}/${OS_VERSION}/${MACHINE_ARCH}
-LOCALPATCHES=/usr/pkg/localpatches
-PACKAGES=/usr/pkg/packages
-DISTDIR=/usr/pkg/distfiles
-RCD_SCRIPTS_DIR=/usr/pkg/etc/rc.d
+# Don't forget to set 'MAKEOBJDIRPREFIX /opt/obj' in your environment with WRKOBJDIR
+#WRKOBJDIR=/opt/obj/pkg
+#PACKAGES=/opt/pkg/packages/${OPSYS}/${OS_VERSION}/${MACHINE_ARCH}
+LOCALPATCHES=/opt/pkg/localpatches
+PACKAGES=/opt/pkg/packages
+DISTDIR=/opt/pkg/distfiles
+RCD_SCRIPTS_DIR=/opt/pkg/etc/rc.d
 
 PKG_DEFAULT_OPTIONS+=-x11
 PKG_DEFAULT_OPTIONS+=-xcb
@@ -56,13 +59,13 @@ PREFER.openssl=pkgsrc
 
 * install ```pkgtools/rc.subr``` (rc.subr-20150510 or later)
 * install ```pkgtools/rcorder```
-* ```mkdir /usr/pkg/var/run```
+* ```mkdir /opt/pkg/var/run```
 
->NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/usr/pkg/etc``` and created symlinks back to /etc to keep everything in ```/usr/pkg/```.  Also symlinked ```/etc/rc.d -> /usr/pkg/etc/rc.d```
+>NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/opt/pkg/etc``` and created symlinks back to /etc to keep everything in ```/opt/pkg/```.  Also symlinked ```/etc/rc.d -> /opt/pkg/etc/rc.d```
 
->**The examples in this document assume these files are in ```/usr/pkg/etc/```.**
+>**The examples in this document assume these files are in ```/opt/pkg/etc/```.**
 
-* Install the scripts in this repo's ```etc``` directory to ```/usr/pkg/etc/```:
+* Install the scripts in this repo's ```etc``` directory to ```/opt/pkg/etc/```:
 ```
 rc.pkgsrc
 rc.d/DAEMON
@@ -105,7 +108,7 @@ and re-issue the load command.
 On some systems, possibly those with an IPv6 addresses (probably a red herring), the ```pkg_admin fetch-pkg-vulnerabilities``` hangs.  In these cases, use curl/wget to fetch the vulnerability list via cron around 3am daily:
 
 ```
-    curl -# -o /usr/pkg/pkgdb/pkg-vulnerabilities \
+    curl -# -o /opt/pkg/pkgdb/pkg-vulnerabilities \
 	    http://ftp.NetBSD.org/pub/NetBSD/packages/vulns/pkg-vulnerabilities.gz
 ```
 
