@@ -3,12 +3,12 @@ pkgsrc-darwin
 Additional support files to aid in running pkgsrc under Darwin.
 This information has been tested under:
 
-* OS X 10.11 (El Capitan) w/ Xcode 7.0
+* OS X 10.11 (El Capitan)
 * OS X 10.10 (Yosemite)
 * OS X 10.9 (Mavericks)
 * OS X 10.8 (Mountain Lion)
 
-Note: with the addition of System Integrity Protection in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions have been modified to use the prefix of ```/opt```.
+Note: with the addition of System Integrity Protection in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions and support files have been modified to use the prefix of ```/opt```.
 
 ## Bootstrapping
 
