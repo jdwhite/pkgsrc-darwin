@@ -8,7 +8,7 @@ This information has been tested under:
 * OS X 10.9 (Mavericks)
 * OS X 10.8 (Mountain Lion)
 
-Note: with the addition of System Integrity Protection in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions and support files have been modified to use the prefix of ```/opt```.
+Note: with the addition of System Integrity Protection in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions and support files have been modified to use the prefix of ```/opt``` instead of the more lengthy ```/usr/local```.
 
 ## Bootstrapping
 
@@ -143,7 +143,7 @@ Thereafter the graphs were rendered without (significant) delay.
 
     ```LDFLAGS.Darwin+=        -lresolv```
 
-* Since Mavericks, OS X doesn't come with a ```cvs``` binary. ```cvs``` is part of the ```devel/scmcvs``` package.
+* Since Mavericks, ```cvs``` is no longer part of the base OS X installation and must be installed form pkgsrc. ```cvs``` is part of the ```devel/scmcvs``` package.
 
 * ```net/xymon``` needs additional shared memory segments. Create ```/etc/sysctl.conf``` and add the lines:
 
