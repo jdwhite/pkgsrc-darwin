@@ -8,7 +8,14 @@ This information has been tested under:
 * OS X 10.9 (Mavericks)
 * OS X 10.8 (Mountain Lion)
 
-Note: with the addition of System Integrity Protection in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions and support files have been modified to use the prefix of ```/opt``` instead of the more lengthy ```/usr/local```.
+## Notes for OS X 10.11 (El Capitan)
+
+* With the addition of System Integrity Protection (SIP) in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions and support files have been modified to use the prefix of ```/opt``` instead of the more lengthy ```/usr/local```.
+* When running OS X Server, several common web ports (80, 443, 8008, 8800, and 8443) are taken by the "service proxy". I'm not sure what the purpose of this is, but since it was in my way I disabled it by unloading the following LaunchDaemon services: 
+```
+	launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.serviceproxy.plist
+    launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.service.ACSServer.plist
+```
 
 ## Bootstrapping
 
@@ -39,6 +46,8 @@ While bootstrapping:
 
 * [optional] Add to ```/opt/pkg/etc/mk.conf```:
 ```
+PKGSRCDIR=/opt/pkgsrc
+
 # Don't forget to set 'MAKEOBJDIRPREFIX /opt/obj' in your environment with WRKOBJDIR
 #WRKOBJDIR=/opt/obj/pkg
 #PACKAGES=/opt/pkg/packages/${OPSYS}/${OS_VERSION}/${MACHINE_ARCH}
