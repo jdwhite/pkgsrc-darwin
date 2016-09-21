@@ -1,8 +1,12 @@
 pkgsrc-darwin
 =============
 Additional support files to aid in running pkgsrc under Darwin.
+
+# September 20, 2016 - WARNING: Do not install Xcode 8 unless you're running macOS Sierra<br>See Troubleshooting section for details.
+
 This information has been tested under:
 
+* macOS 10.12 (Sierra) -- ***in progress***
 * OS X 10.11 (El Capitan)
 * OS X 10.10 (Yosemite)
 * OS X 10.9 (Mavericks)
@@ -111,6 +115,18 @@ To launch rc.pkgsrc at boot:
 and re-issue the load command.
 
 ## Troubleshooting
+
+### ERROR: This package has set PKG_FAIL_REASON:<br>ERROR: No suitable Xcode SDK or Command Line Tools installed.
+
+* http://mail-index.netbsd.org/pkgsrc-users/2016/09/16/msg023742.html
+
+Due to the way pkgsrc checks OS and SDK versions, and changes Apple made in Xcode 8, building with Xcode 8 on non-macOS Sierra machines will fail.
+
+Until this is worked around in pkgsrc, you might:
+
+* Install macOS Sierra.
+* Revert to Xcode 7 (Download from https://developer.apple.com/download/more/)
+* Wait patienty (fix probably not going to be in 2016Q3 release)
 
 ### Command ```pkg_admin fetch-pkg-vulnerabilities``` hangs indefinitely.
 
