@@ -2,50 +2,49 @@ pkgsrc-darwin
 =============
 Additional support files to aid in running pkgsrc under Darwin.
 
-# September 20, 2016 - WARNING: Do not install Xcode 8 unless you're running macOS Sierra<br>See Troubleshooting section for details.
-
 This information has been tested under:
 
-* macOS 10.12 (Sierra) -- ***in progress***
+* macOS 10.12 (Sierra)
 * OS X 10.11 (El Capitan)
 * OS X 10.10 (Yosemite)
 * OS X 10.9 (Mavericks)
 * OS X 10.8 (Mountain Lion)
 
-## Notes for OS X 10.11 (El Capitan)
+## Notes for OS X 10.11 (El Capitan) and later
 
 * With the addition of System Integrity Protection (SIP) in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions and support files have been modified to use the prefix of ```/opt``` instead of the more lengthy ```/usr/local```.
 * When running OS X Server, several common web ports (80, 443, 8008, 8800, and 8443) are taken by the "service proxy". I'm not sure what the purpose of this is, but since it was in my way I disabled it by unloading the following LaunchDaemon services: 
 ```
-	launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.serviceproxy.plist
-    launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.service.ACSServer.plist
+launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.serviceproxy.plist
+launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.service.ACSServer.plist
 ```
 
 ## Bootstrapping
 
-1. Install Xcode and start Xcode, accept license agreement, and allow it to install components. 
-2. Fetch pkgsrc.tar.xz from ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc.tar.xz
-3. Extract as root: ```tar -C /opt --xz -xf pkgsrc.tar.xz```
+1. Install Xcode and start Xcode, accept license agreement, and allow it to install components.
+2. From terminal, run: ```xcode-select --install```. A GUI window will appear asking for confirmation to install the command line tools.
+3. Fetch pkgsrc.tar.xz from ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc.tar.xz
+4. Extract as root: ```tar -C /opt --xz -xf pkgsrc.tar.xz```
 
 I prefer to keep as much as possible in the ```/opt/pkg``` tree. If you don't, you can disregard the ```--varbase``` flag and argument.
 
 Bootstrap with:
 ```
-    cd /opt/pkgsrc/bootstrap
-    ./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/pkgdb --varbase /opt/pkg/var
+cd /opt/pkgsrc/bootstrap
+./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/pkgdb --varbase /opt/pkg/var
 ```
 
 While bootstrapping:
 
 *  Create and populate ```/etc/paths.d/pkgsrc```:
 ```
-    /opt/pkg/sbin
-    /opt/pkg/bin
+/opt/pkg/sbin
+/opt/pkg/bin
 ```
 
 * Create and populate ```/etc/manpaths.d/pkgsrc```:
 ```
-    /opt/pkg/man
+/opt/pkg/man
 ```
 
 * [optional] Add to ```/opt/pkg/etc/mk.conf```:
@@ -118,6 +117,9 @@ and re-issue the load command.
 
 ### ERROR: This package has set PKG_FAIL_REASON:<br>ERROR: No suitable Xcode SDK or Command Line Tools installed.
 
+First, check that you've installed the command line tools (step #2 in the Bootstrapping section above).
+
+If that fails it may be due to the following:
 * http://mail-index.netbsd.org/pkgsrc-users/2016/09/16/msg023742.html
 
 Due to the way pkgsrc checks OS and SDK versions, and changes Apple made in Xcode 8, building with Xcode 8 on non-macOS Sierra machines will fail.
@@ -133,8 +135,8 @@ Until this is worked around in pkgsrc, you might:
 On some systems, possibly those with an IPv6 addresses (probably a red herring), the ```pkg_admin fetch-pkg-vulnerabilities``` hangs.  In these cases, use curl/wget to fetch the vulnerability list via cron around 3am daily:
 
 ```
-    curl -# -o /opt/pkg/pkgdb/pkg-vulnerabilities \
-	    http://ftp.NetBSD.org/pub/NetBSD/packages/vulns/pkg-vulnerabilities.gz
+curl -# -o /opt/pkg/pkgdb/pkg-vulnerabilities \
+    http://ftp.NetBSD.org/pub/NetBSD/packages/vulns/pkg-vulnerabilities.gz
 ```
 
 ### Large delay before graphs render when using rrdtool.
@@ -147,17 +149,17 @@ In the author's case, the process using the fontconfig library was httpd running
 
 The author chose to create ```/.cache/``` with the following permissions and ownership:
 ```
-    drwxrwxrwx  3 root  wheel  102 Feb 16 11:51 /.cache
+drwxrwxrwx  3 root  wheel  102 Feb 16 11:51 /.cache
 ```
 On the next call to the fontconfig library user _www was able to create and populate the cache directory.
 ```
-    /.cache/fontconfig:
-    total 1400
-    -rw-r--r--  1 _www  wheel     144 Feb 16 11:52 2643cf6afbfb317cb17c1d21dc458165-x86_64.cache-4
-    -rw-r--r--  1 _www  wheel  977944 Feb 16 11:52 84c0f976e30e948e99073af70f4ae876-x86_64.cache-4
-    -rw-r--r--  1 _www  wheel     200 Feb 16 11:51 CACHEDIR.TAG
-    -rw-r--r--  1 _www  wheel  400608 Feb 16 11:51 b0a71e6bf6a8a1a908413a823d76e21f-x86_64.cache-4
-    -rw-r--r--  1 _www  wheel   43856 Feb 16 11:51 c94fc4589f4e4f179bb7abc5ef634560-x86_64.cache-4
+/.cache/fontconfig:
+total 1400
+-rw-r--r--  1 _www  wheel     144 Feb 16 11:52 2643cf6afbfb317cb17c1d21dc458165-x86_64.cache-4
+-rw-r--r--  1 _www  wheel  977944 Feb 16 11:52 84c0f976e30e948e99073af70f4ae876-x86_64.cache-4
+-rw-r--r--  1 _www  wheel     200 Feb 16 11:51 CACHEDIR.TAG
+-rw-r--r--  1 _www  wheel  400608 Feb 16 11:51 b0a71e6bf6a8a1a908413a823d76e21f-x86_64.cache-4
+-rw-r--r--  1 _www  wheel   43856 Feb 16 11:51 c94fc4589f4e4f179bb7abc5ef634560-x86_64.cache-4
 ```
 
 Thereafter the graphs were rendered without (significant) delay.
@@ -165,18 +167,17 @@ Thereafter the graphs were rendered without (significant) delay.
 ## Other Notes
 
 * ```net/hesiod/Makefile```; add:
-
-    ```LDFLAGS.Darwin+=        -lresolv```
+	```LDFLAGS.Darwin+=        -lresolv```
 
 * Since Mavericks, ```cvs``` is no longer part of the base OS X installation and must be installed form pkgsrc. ```cvs``` is part of the ```devel/scmcvs``` package.
 
 * ```net/xymon``` needs additional shared memory segments. Create ```/etc/sysctl.conf``` and add the lines:
 
 ```
-    kern.sysv.shmmax=16777216
-    kern.sysv.shmmni=128
-    kern.sysv.shmseg=32
-    kern.sysv.shmall=4096
+kern.sysv.shmmax=16777216
+kern.sysv.shmmni=128
+kern.sysv.shmseg=32
+kern.sysv.shmall=4096
 ```
 
 Then, either reboot or load them each by hand with ```sysctl -w```.
