@@ -21,10 +21,10 @@ launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/Lau
 
 ## Bootstrapping
 
-1. Install Xcode and start Xcode, accept license agreement, and allow it to install components.
-2. From terminal, run: ```xcode-select --install```. A GUI window will appear asking for confirmation to install the command line tools.
-3. Fetch pkgsrc.tar.xz from ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc.tar.xz
-4. Extract as root: ```tar -C /opt --xz -xf pkgsrc.tar.xz```
+1. Install the Command Line Tools by runnning ```xcode-select --install``` from a terminal window. A GUI window will appear asking for confirmation to install the command line tools.
+The tools can also be downloaded manually; see [Apple Techical Note TN2339](https://developer.apple.com/library/content/technotes/tn2339/_index.html).
+2. Fetch pkgsrc.tar.xz from ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc.tar.xz
+3. Extract as root: ```tar -C /opt --xz -xf pkgsrc.tar.xz```
 
 I prefer to keep as much as possible in the ```/opt/pkg``` tree. If you don't, you can disregard the ```--varbase``` flag and argument.
 
