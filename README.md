@@ -69,7 +69,7 @@ PREFER.openssl=pkgsrc
 
 ### Install startup framework files
 
-* install ```pkgtools/rc.subr``` (rc.subr-20150510 or later)
+* install ```pkgtools/rc.subr```
 * install ```pkgtools/rcorder```
 * ```mkdir /opt/pkg/var/run```
 
@@ -80,17 +80,12 @@ PREFER.openssl=pkgsrc
 * Install the scripts in this repo's ```etc``` directory to ```/opt/pkg/etc/```:
 ```
 rc.pkgsrc
-rc.d/DAEMON
-rc.d/LOGIN
 rc.d/NETWORKING
-rc.d/SERVERS
 rc.d/syslogd
 rc.d/mountcritremote
 ```
 
 >NOTE: The included ```rc.d/NETWORKING``` has been heavily modified from the original NetBSD version to wait for one or more network interfaces to have an IP address assigned to it (or 60 seconds elapses) before proceeding with the rc.pkgsrc startup. This was added to help ensure that the network interfaces were properly configured so that applications that bound to them would not have to be restarted after the interface was configured post application startup.
-
->**The command ```ipconfig waitall```, while claiming to provide this exact functionality, does NOT work as advertised. Additionally, the man page discourages use of ```ipconfig``` for anything other than testing/debugging indicating that it's deprecated.**
 
 To take advantage of this functionality, add the following to ```rc.conf```:
 
