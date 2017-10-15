@@ -36,6 +36,6 @@ files=$(rcorder -s nostart ${rc_rcorder_flags} /opt/pkg/etc/rc.d/*)
 for _rc_elem in $files; do
 	run_rc_script $_rc_elem start
 done
-) | logger -t rc.pkgsrc 2>&1
+) 2>&1 | tee -ai /var/log/pkgsrc | logger -t rc.pkgsrc
 
 exit 0
