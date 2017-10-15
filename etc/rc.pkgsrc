@@ -15,7 +15,7 @@ umask 022
 _rc_subr_path=/opt/pkg/etc/rc.subr
 _rc_conf_path=/opt/pkg/etc/rc.conf
 
-# I stick these in /usr/pkg and create symlinks to them in /etc.
+# I stick these in /opt/pkg and create symlinks to them in /etc.
 . ${_rc_subr_path}
 . ${_rc_conf_path}
 _rc_conf_loaded=true
