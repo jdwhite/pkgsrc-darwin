@@ -27,16 +27,16 @@ NETWORKING_start() {
 		addr=""
 		slept=0
 		until [ "x${addr}" != "x" ]; do
-			addr=$(/sbin/ipconfig getifaddr $IF)
+			addr=$(/usr/sbin/ipconfig getifaddr $IF)
 			if [ "x$addr" = "x" ]; then
-				/usr/bin/logger -t NETWORKING ${IF}: awaiting address assignment
+				echo NETWORKING ${IF}: awaiting address assignment
 				sleep 5
 				slept=$((slept+5))
 			else
-				/usr/bin/logger -t NETWORKING ${IF}: address is $addr
+				echo NETWORKING ${IF}: address is $addr
 			fi
 			if [ $slept -gt 59 ]; then
-				/usr/bin/logger -t NETWORKING ${IF}: timeout awaiting address assignment
+				echo NETWORKING ${IF}: timeout awaiting address assignment
 				break;
 			fi
 		done
