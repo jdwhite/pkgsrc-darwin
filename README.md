@@ -4,6 +4,7 @@ Additional support files to aid in running pkgsrc under Darwin.
 
 This information has been tested under:
 
+* macOS 10.13 (High Sierra)
 * macOS 10.12 (Sierra)
 * OS X 10.11 (El Capitan)
 * OS X 10.10 (Yosemite)
@@ -161,10 +162,12 @@ Thereafter the graphs were rendered without (significant) delay.
 
 ## Other Notes
 
+* Since High Sierra, ```telnet``` and ```ftp``` clients are no longer part of the base OS, but are part of the ```net/inetutils``` package. The installed binaries are g-prefixed (gtelnet, gftp). For convenience, I created symlinks from ```/usr/local/bin/{telnet,ftp} -> /opt/pkg/bin/g{telnet,ftp}```.
+
+* Since Mavericks, the ```cvs``` client is no longer part of the base OS, but is part of the ```devel/scmcvs``` package.
+
 * ```net/hesiod/Makefile```; add:
 	```LDFLAGS.Darwin+=        -lresolv```
-
-* Since Mavericks, ```cvs``` is no longer part of the base OS X installation and must be installed form pkgsrc. ```cvs``` is part of the ```devel/scmcvs``` package.
 
 * ```net/xymon``` needs additional shared memory segments. Create ```/etc/sysctl.conf``` and add the lines:
 
