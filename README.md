@@ -1,15 +1,6 @@
 pkgsrc-darwin
 =============
-Additional support files to aid in running pkgsrc under Darwin.
-
-This information has been tested under:
-
-* macOS 10.13 (High Sierra)
-* macOS 10.12 (Sierra)
-* OS X 10.11 (El Capitan)
-* OS X 10.10 (Yosemite)
-* OS X 10.9 (Mavericks)
-* OS X 10.8 (Mountain Lion)
+This repository contains documentation and supplemental files for installing and configuring the [pkgsrc](http://pkgsrc.org) package management system under OS X/MacOS version 10.8 and later.
 
 ## Notes for OS X 10.11 (El Capitan) and later
 
