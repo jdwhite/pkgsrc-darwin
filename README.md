@@ -1,11 +1,11 @@
 pkgsrc-darwin
 =============
-This repository contains documentation and supplemental files for installing and configuring the [pkgsrc](http://pkgsrc.org) package management system under OS X/MacOS version 10.8 and later.
+This repository contains documentation, support files, and troubleshooting tips for using the [pkgsrc](http://pkgsrc.org) package management system under OS X/MacOS version 10.8 and later.
 
 ## Notes for OS X 10.11 (El Capitan) and later
 
 * With the addition of System Integrity Protection (SIP) in 10.11, the creation of files/directories under ```/usr``` is now restricted. These instructions and support files have been modified to use the prefix of ```/opt``` instead of the more lengthy ```/usr/local```.
-* When running OS X Server, several common web ports (80, 443, 8008, 8800, and 8443) are taken by the "service proxy". I'm not sure what the purpose of this is, but since it was in my way I disabled it by unloading the following LaunchDaemon services: 
+* If running OS X/macOS Server, several common web ports (80, 443, 8008, 8800, and 8443) are taken by the "service proxy". I'm not sure what the purpose of this is, but since it was in my way I disabled it by unloading the following LaunchDaemon services: 
 ```
 launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.serviceproxy.plist
 launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.service.ACSServer.plist
@@ -153,7 +153,7 @@ Thereafter the graphs were rendered without (significant) delay.
 
 ## Other Notes
 
-* Since High Sierra, ```telnet``` and ```ftp``` clients are no longer part of the base OS, but are part of the ```net/inetutils``` package. The installed binaries are g-prefixed (gtelnet, gftp). For convenience, I created symlinks from ```/usr/local/bin/{telnet,ftp} -> /opt/pkg/bin/g{telnet,ftp}```.
+* Since High Sierra, ```telnet``` and ```ftp``` clients are no longer part of the base OS, but are part of the ```net/inetutils``` package. The installed binaries are g-prefixed (gtelnet, gftp). For convenience, I created symlinks from ```/usr/local/bin/{telnet,ftp} -> /opt/pkg/bin/g{telnet,ftp}```. There's also a portable version of the NetBSD ftp client in ```net/tnftp```.
 
 * Since Mavericks, the ```cvs``` client is no longer part of the base OS, but is part of the ```devel/scmcvs``` package.
 
