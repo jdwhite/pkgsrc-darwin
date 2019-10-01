@@ -97,11 +97,12 @@ and re-issue the load command.
 
 ## Troubleshooting
 
-### ERROR: This package has set PKG_FAIL_REASON:<br>ERROR: No suitable Xcode SDK or Command Line Tools installed.
+### Xcode 8 - ERROR: This package has set PKG_FAIL_REASON:<br>ERROR: No suitable Xcode SDK or Command Line Tools installed.
 
-First, check that you've installed the command line tools (step #2 in the Bootstrapping section above).
+First, check that you've installed the command line tools (step #1 in the Bootstrapping section above).
 
-If that fails it may be due to the following:
+With Xcode 8 it may be due to the following:
+
 * http://mail-index.netbsd.org/pkgsrc-users/2016/09/16/msg023742.html
 
 Due to the way pkgsrc checks OS and SDK versions, and changes Apple made in Xcode 8, building with Xcode 8 on non-macOS Sierra machines will fail.
@@ -111,6 +112,16 @@ Until this is worked around in pkgsrc, you might:
 * Install macOS Sierra.
 * Revert to Xcode 7 (Download from https://developer.apple.com/download/more/)
 * Wait patienty (fix probably not going to be in 2016Q3 release)
+
+### **NOT** Xcode 8 - ERROR: This package has set PKG_FAIL_REASON:<br>ERROR: No suitable Xcode SDK or Command Line Tools installed.
+
+This has cropped up again with macOS 10.14 and Xcode 11. 
+
+* ```xcode-select --install``` says the command line tools are already installed; checking ```/Library/Developer/CommandLineTools``` seems to confirm this.  
+* ```xcode-select -p``` returns ```/Library/Developer/CommandLineTools```; looks good.
+* Removing ```/Library/Developer/CommandLineTools``` and re-installing doesn't fix the issue.
+
+**_FIX_** for me was to remove ```/Applications/Xcode.app``` and ```/Library/Developer/CommandLineTools``` and re-install the Command Line Tools with ```xcode-select --install```, which is fine since I don't use the Xcode app anyway. No idea what's going on here. Possibly some bogosity with Xcode 11 and non-Catalina macOS.
 
 ### Command ```pkg_admin fetch-pkg-vulnerabilities``` hangs indefinitely.
 
