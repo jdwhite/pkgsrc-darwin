@@ -1,6 +1,6 @@
 pkgsrc-darwin
 =============
-This repository contains documentation and supplemental files for installing and configuring the [pkgsrc](http://pkgsrc.org) package management system under OS X/macOS version 10.8 and later.
+This repository contains documentation, support files, and troubleshooting tips for using the [pkgsrc](http://pkgsrc.org) package management system under OS X/MacOS version 10.8 and later.
 
 ## Note regarding System Integrity Protection (SIP)
 
