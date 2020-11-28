@@ -1,12 +1,19 @@
 pkgsrc-darwin
 =============
-This repository contains documentation, support files, and troubleshooting tips for using the [pkgsrc](http://pkgsrc.org) package management system under OS X/MacOS version 10.8 and later.
+This repository contains documentation, support files, and troubleshooting tips for using the [pkgsrc](http://pkgsrc.org) package management system under OS X/macOS version 10.8 and later.
 
-## Note regarding System Integrity Protection (SIP)
+
+## Using Binary Packages
+
+The `pkgin` tool provides a `yum/apt`-like interface for managing packages downloaded from one or more binary package repositories. Check out the excellent [`pkgin` bootstrapping instructions](https://pkgsrc.joyent.com/install-on-osx/) from Joyent.
+
+## Compiling Packages From Source
+
+### Note regarding System Integrity Protection (SIP)
 
 With the addition of System Integrity Protection in OS X 10.11, the ability to modify most everything under ```/usr``` is now restricted, even as root, with the exception of ```/usr/local```. These instructions and support files have been modified to use the prefix of ```/opt``` instead of the more lengthy ```/usr/local```.
 
-## Bootstrapping
+### Bootstrapping
 
 1. Install the Command Line Tools by runnning ```xcode-select --install``` from a terminal window. A GUI window will appear asking for confirmation to install the command line tools.
 The tools can also be downloaded manually; see [Apple Techical Note TN2339](https://developer.apple.com/library/content/technotes/tn2339/_index.html).
@@ -52,14 +59,14 @@ PKG_DEFAULT_OPTIONS+=-xcb
 PREFER.openssl=pkgsrc
 ```
 
-## Starting Apps Automatically at Boot
+### Starting Apps Automatically at Boot
 
-### Install startup framework files
+#### Install startup framework files:
 
 * install ```pkgtools/rc.d-boot```
 * ```mkdir /opt/pkg/var/run```
 
->NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/opt/pkg/etc``` and created symlinks back to /etc to keep everything in ```/opt/pkg/```.  Also symlinked ```/etc/rc.d -> /opt/pkg/etc/rc.d```
+>NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/opt/pkg/etc``` and created symlinks back to `/etc` to keep everything in ```/opt/pkg/```. Also symlinked ```/etc/rc.d -> /opt/pkg/etc/rc.d```
 
 ## Troubleshooting
 
@@ -77,7 +84,7 @@ Until this is worked around in pkgsrc, you might:
 
 * Install macOS Sierra.
 * Revert to Xcode 7 (Download from https://developer.apple.com/download/more/)
-* Wait patienty (fix probably not going to be in 2016Q3 release)
+* Wait patiently (fix probably not going to be in 2016Q3 release)
 
 ### **NOT** Xcode 8 - ERROR: This package has set PKG_FAIL_REASON:<br>ERROR: No suitable Xcode SDK or Command Line Tools installed.
 
@@ -125,23 +132,24 @@ Thereafter the graphs were rendered without (significant) delay.
 
 ## Other Notes
 
-* When running OS X Server, several common web ports (80, 443, 8008, 8800, and 8443) are taken by the "service proxy". I'm not sure what the purpose of this is, but since it was in my way I disabled it by unloading the following LaunchDaemon services: 
+* When running OS X Server, several common web ports (80, 443, 8008, 8800, and 8443) are taken by the "service proxy". Since it was in my way I disabled it by unloading the following LaunchDaemon services: 
 
 ```
 launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.serviceproxy.plist
 launchctl unload /Applications/Server.app/Contents/ServerRoot/System/Library/LaunchDaemons/com.apple.service.ACSServer.plist
 ```
 
-* Since Catalina, the default shell has been changed form Bash (3.x) to Zsh. You can install ```shells/bash``` and then ```chsh -s /opt/pkg/bin/bash``` to restore bash as your default shell _(assuming if you haven't already been running bash from pkgsrc to get all the version 4.x and later goodies like ```shells/bash-completion```.)_ **You will need to logout and back in for the shell change to take effect.**
+* Since 10.15 Catalina, the default shell has been changed form Bash (3.x) to Zsh. You can install ```shells/bash``` and then ```chsh -s /opt/pkg/bin/bash``` to restore bash as your default shell _(assuming if you haven't already been running bash from pkgsrc to get all the version 4.x and later goodies like ```shells/bash-completion```.)_ **You will need to logout and back in for the shell change to take effect.**
 
-* Since High Sierra, telnet and ftp clients are no longer part of the base OS. Replacements can be found in the following packages:
+* Since 10.14 Mavericks, the CVS client is no longer part of the base OS. Install the ```devel/scmcvs``` package.
+
+* Since 10.13 High Sierra, telnet and ftp clients are no longer part of the base OS. Replacements can be found in the following packages:
 
     * ```net/inetutils``` (GNU Inetutils) provides telnet and ftp (among others). The binaries are g-prefixed (gtelnet, gftp). For convenience, I created symlinks from ```/usr/local/bin/{telnet,ftp} -> /opt/pkg/bin/g{telnet,ftp}```.
     * ```net/tnftp``` (portable version of the NetBSD FTP client)
 
-* Since Mavericks, the CVS client is no longer part of the base OS. Install the ```devel/scmcvs``` package.
 
-* ```net/hesiod/Makefile```; add:
+* ```net/hesiod/Makefile```; add the following:
 	```LDFLAGS.Darwin+=        -lresolv```
 
 * ```net/xymon``` needs additional shared memory segments. Create ```/etc/sysctl.conf``` and add the lines:
