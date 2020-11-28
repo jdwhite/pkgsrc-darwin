@@ -10,7 +10,7 @@ With the addition of System Integrity Protection in OS X 10.11, the ability to m
 
 1. Install the Command Line Tools by runnning ```xcode-select --install``` from a terminal window. A GUI window will appear asking for confirmation to install the command line tools.
 The tools can also be downloaded manually; see [Apple Techical Note TN2339](https://developer.apple.com/library/content/technotes/tn2339/_index.html).
-2. Fetch pkgsrc.tar.xz from ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc.tar.xz
+2. Fetch `pkgsrc.tar.xz` from `ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc.tar.xz`
 3. Extract as root: ```tar -C /opt --xz -xf pkgsrc.tar.xz```
 
 I prefer to keep as much as possible in the ```/opt/pkg``` tree. If you don't, you can disregard the ```--varbase``` flag and argument.
@@ -40,7 +40,7 @@ PKGSRCDIR=/opt/pkgsrc
 
 # Don't forget to set 'MAKEOBJDIRPREFIX /opt/obj' in your environment with WRKOBJDIR
 #WRKOBJDIR=/opt/obj/pkg
-#PACKAGES=/opt/pkg/packages/${OPSYS}/${OS_VERSION}/${MACHINE_ARCH}
+#PACKAGES=/opt/pkg/packages/${OPSYS}/${MACHINE_ARCH}/${OS_VERSION}
 LOCALPATCHES=/opt/pkg/localpatches
 PACKAGES=/opt/pkg/packages
 DISTDIR=/opt/pkg/distfiles
@@ -52,48 +52,14 @@ PKG_DEFAULT_OPTIONS+=-xcb
 PREFER.openssl=pkgsrc
 ```
 
-## Starting Apps at Boot
+## Starting Apps Automatically at Boot
 
 ### Install startup framework files
 
-* install ```pkgtools/rc.subr```
-* install ```pkgtools/rcorder```
+* install ```pkgtools/rc.d-boot```
 * ```mkdir /opt/pkg/var/run```
 
 >NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/opt/pkg/etc``` and created symlinks back to /etc to keep everything in ```/opt/pkg/```.  Also symlinked ```/etc/rc.d -> /opt/pkg/etc/rc.d```
-
->**The examples in this document assume these files are in ```/opt/pkg/etc/```.**
-
-* Install the scripts in this repo's ```etc``` directory to ```/opt/pkg/etc/```:
-```
-rc.pkgsrc
-rc.d/NETWORKING
-rc.d/syslogd
-rc.d/mountcritremote
-```
-
->NOTE: ```rc.d/NETWORKING``` in this repo will wait for one or more network interfaces to have an IP address assigned to it (or 60 seconds elapses) before proceeding with the rc.pkgsrc startup. This was added to help ensure that the network interfaces were properly configured so that applications that bound to them would not have to be restarted after the interface was configured post application startup.
-
-To take advantage of this functionality, add the following to ```rc.conf```:
-
-```
-NETWORKING_flags="en0 en6"
-```
-
-Replace _en0 en6_ with the network interface names appropriate to your system.
-
-### Create a Launchd User Daemon.
-
-To launch rc.pkgsrc at boot:
-
-* Copy ```LaunchDaemons/org.pkgsrc.rc.plist``` to ```/Library/LaunchDaemons/```.
-
-* Load it with:
-```launchctl load /Library/LaunchDaemons/org.pkgsrc.rc.plist```
-
-* Check ```/var/log/system.log``` to see if it ran correctly. If not, correct the problem and then unload with:
-```launchctl unload /Library/LaunchDaemons/org.pkgsrc.rc.plist```
-and re-issue the load command.
 
 ## Troubleshooting
 
