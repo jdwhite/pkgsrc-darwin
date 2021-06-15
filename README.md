@@ -2,10 +2,9 @@ pkgsrc-darwin
 =============
 This repository contains documentation, support files, and troubleshooting tips for using the [pkgsrc](http://pkgsrc.org) package management system under OS X/macOS version 10.8 and later.
 
-
 ## Using Binary Packages
 
-The `pkgin` tool provides a `yum/apt`-like interface for managing packages downloaded from one or more binary package repositories. Check out the excellent [`pkgin` bootstrapping instructions](https://pkgsrc.joyent.com/install-on-osx/) from Joyent.
+The `pkgin` tool provides a `yum/dnf/apt`-like interface for managing packages downloaded from one or more binary package repositories. Check out the excellent [`pkgin` bootstrapping instructions](https://pkgsrc.joyent.com/install-on-osx/) from Joyent.
 
 ## Compiling Packages From Source
 
@@ -25,7 +24,7 @@ I prefer to keep as much as possible in the ```/opt/pkg``` tree. If you don't, y
 Bootstrap with:
 ```
 cd /opt/pkgsrc/bootstrap
-./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/pkgdb --varbase /opt/pkg/var
+./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/.pkgdb --varbase /opt/pkg/var
 ```
 
 While bootstrapping:
@@ -69,6 +68,18 @@ PREFER.openssl=pkgsrc
 >NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/opt/pkg/etc``` and created symlinks back to `/etc` to keep everything in ```/opt/pkg/```. Also symlinked ```/etc/rc.d -> /opt/pkg/etc/rc.d```
 
 ## Troubleshooting
+
+### BigSur/XCode 12 - version:1:1: error: expected unqualified-id
+
+According to [this](https://trac.macports.org/ticket/62784) posting, XCode 12 contains a "C++20-capable compiler and the VERSION file included in the source is conflicting with the version header of your compiler because you are on a case-insensitive filesystem."
+
+One work-around is to create an APFS container, formatted case-sensitive, and mount that container on `/opt` by adding the UUID of the container in `/etc/fstab`:
+
+	UUID=A6BBE2B5-7395-49A5-94AB-3934323D50285 /opt apfs rw,auto
+
+The UUID can be obtained using `diskutil info {disk|partition|volume|container}`. `Diskarbitrationd(8)` will automatically mount the case-sensitive volume at boot.
+
+Be sure to copy any existing data out of `/opt` before you reboot or manually mount the new filesystem over `/opt`.
 
 ### Xcode 8 - ERROR: This package has set PKG_FAIL_REASON:<br>ERROR: No suitable Xcode SDK or Command Line Tools installed.
 
