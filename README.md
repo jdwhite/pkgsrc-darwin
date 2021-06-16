@@ -44,7 +44,7 @@ While bootstrapping:
 ```
 PKGSRCDIR=/opt/pkgsrc
 
-# Don't forget to set 'MAKEOBJDIRPREFIX /opt/obj' in your environment with WRKOBJDIR
+# Set 'MAKEOBJDIRPREFIX=/opt/obj' in your environment when using WRKOBJDIR.
 #WRKOBJDIR=/opt/obj/pkg
 #PACKAGES=/opt/pkg/packages/${OPSYS}/${MACHINE_ARCH}/${OS_VERSION}
 LOCALPATCHES=/opt/pkg/localpatches
