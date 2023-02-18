@@ -24,8 +24,10 @@ I prefer to keep as much as possible in the ```/opt/pkg``` tree. If you don't, y
 Bootstrap with:
 ```
 cd /opt/pkgsrc/bootstrap
-./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/.pkgdb --varbase /opt/pkg/var
+./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/.pkgdb --varbase /opt/pkg/var --make-jobs 5 
 ```
+
+Replace the `'5'` argument to `--make-jobs` with an integer matching the number of cores in your build machine.
 
 While bootstrapping:
 
@@ -43,12 +45,13 @@ While bootstrapping:
 * [optional] Add to ```/opt/pkg/etc/mk.conf```:
 ```
 PKGSRCDIR=/opt/pkgsrc
+OSX_TOLERATE_SDK_SKEW=yes
 
 # Set 'MAKEOBJDIRPREFIX=/opt/obj' in your environment when using WRKOBJDIR.
 #WRKOBJDIR=/opt/obj/pkg
 #PACKAGES=/opt/pkg/packages/${OPSYS}/${MACHINE_ARCH}/${OS_VERSION}
-LOCALPATCHES=/opt/pkg/localpatches
 PACKAGES=/opt/pkg/packages
+LOCALPATCHES=/opt/pkg/localpatches
 DISTDIR=/opt/pkg/distfiles
 RCD_SCRIPTS_DIR=/opt/pkg/etc/rc.d
 
@@ -68,6 +71,22 @@ PREFER.openssl=pkgsrc
 >NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/opt/pkg/etc``` and created symlinks back to `/etc` to keep everything in ```/opt/pkg/```. Also symlinked ```/etc/rc.d -> /opt/pkg/etc/rc.d```
 
 ## Troubleshooting
+
+### XCode 14/macOS Ventura - `struct stat64 is deprecated` (or fstat64, lstat64, xxx64, etc.)
+
+From `man stat64`:
+
+```
+TRANSITIONAL DESCRIPTION (NOW DEPRECATED)
+     The fstat64, lstat64 and stat64 routines are equivalent to their 
+     corresponding non-64-suffixed routine, when 64-bit inodes are in effect.
+     They were added before there was support for the symbol variants, and so
+     are now deprecated.  Instead of using these, set the _DARWIN_USE_64_BIT_INODE
+     macro before including header files to force 64-bit inode support.
+
+     The stat64 structure used by these deprecated routines is the same as the 
+     stat structure when 64-bit inodes are in effect (see above).
+```
 
 ### BigSur/XCode 12 - version:1:1: error: expected unqualified-id
 
