@@ -88,6 +88,8 @@ TRANSITIONAL DESCRIPTION (NOW DEPRECATED)
      stat structure when 64-bit inodes are in effect (see above).
 ```
 
+Solution: change code to use non-64-suffixed syscalls. Could also `#define stat64 stat` and the like.
+
 ### BigSur/XCode 12 - version:1:1: error: expected unqualified-id
 
 According to [this](https://trac.macports.org/ticket/62784) posting, XCode 12 contains a "C++20-capable compiler and the VERSION file included in the source is conflicting with the version header of your compiler because you are on a case-insensitive filesystem."
