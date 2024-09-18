@@ -2,15 +2,17 @@ pkgsrc-darwin
 =============
 This repository contains documentation, support files, and troubleshooting tips for using the [pkgsrc](http://pkgsrc.org) package management system under OS X/macOS version 10.8 and later.
 
+Last tested with: macOS Sequoia 15.0 (Apple Silicon), XCode 16.0 Command Line Tools, pkgsrc-current-20240918
+
 ## Using Binary Packages
 
-The `pkgin` tool provides a `yum/dnf/apt`-like interface for managing packages downloaded from one or more binary package repositories. Check out the excellent [`pkgin` bootstrapping instructions](https://pkgsrc.joyent.com/install-on-osx/) from Joyent.
+The `pkgin` tool provides a `yum/dnf/apt`-like interface for managing packages downloaded from one or more binary package repositories. Check out the excellent [`pkgin` bootstrapping instructions](https://pkgsrc.smartos.org/install-on-macos/).
 
 ## Compiling Packages From Source
 
 ### Note regarding System Integrity Protection (SIP)
 
-With the addition of System Integrity Protection in OS X 10.11, the ability to modify most everything under ```/usr``` is now restricted, even as root, with the exception of ```/usr/local```. These instructions and support files have been modified to use the prefix of ```/opt``` instead of the more lengthy ```/usr/local```.
+With the addition of System Integrity Protection in OS X 10.11, the ability to modify most everything under ```/usr``` is now restricted, even as root, with the exception of ```/usr/local```. These instructions and support files have been modified to use the prefix of ```/opt``` instead of the more lengthy ```/usr/local```. Do you _*NOT*_ need to disable SIP to use pkgsrc on macOS.
 
 ### Bootstrapping
 
@@ -23,8 +25,7 @@ I prefer to keep as much as possible in the ```/opt/pkg``` tree. If you don't, y
 
 Bootstrap with:
 ```
-cd /opt/pkgsrc/bootstrap
-./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/.pkgdb --varbase /opt/pkg/var --make-jobs 5 
+cd /opt/pkgsrc/bootstrap && ./bootstrap --compiler clang --abi 64 --prefix /opt/pkg --pkgdbdir /opt/pkg/.pkgdb --varbase /opt/pkg/var --prefer-pkgsrc=yes --make-jobs 5 
 ```
 
 Replace the `'5'` argument to `--make-jobs` with an integer matching the number of cores in your build machine.
@@ -46,6 +47,7 @@ While bootstrapping:
 ```
 PKGSRCDIR=/opt/pkgsrc
 OSX_TOLERATE_SDK_SKEW=yes
+MAKE_JOBS=5
 
 # Set 'MAKEOBJDIRPREFIX=/opt/obj' in your environment when using WRKOBJDIR.
 #WRKOBJDIR=/opt/obj/pkg
@@ -57,18 +59,15 @@ RCD_SCRIPTS_DIR=/opt/pkg/etc/rc.d
 
 PKG_DEFAULT_OPTIONS+=-x11
 PKG_DEFAULT_OPTIONS+=-xcb
-
-PREFER.openssl=pkgsrc
 ```
 
 ### Starting Apps Automatically at Boot
 
 #### Install startup framework files:
-
 * install ```pkgtools/rc.d-boot```
 * ```mkdir /opt/pkg/var/run```
 
->NOTE: I moved ```/etc/rc.subr``` and ```/etc/rc.conf``` to ```/opt/pkg/etc``` and created symlinks back to `/etc` to keep everything in ```/opt/pkg/```. Also symlinked ```/etc/rc.d -> /opt/pkg/etc/rc.d```
+>NOTE: there are some bad `rc.d` scripts that hard code `/etc/rc.subr`, so you may want to symlink `/etc/rc.subr` to `/opt/pkg/etc/rc.subr`. Also, please file a PR so the script can be fixed.
 
 ## Troubleshooting
 
