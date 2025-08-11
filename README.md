@@ -1,3 +1,7 @@
+# This repository has been archived and moved to [Codeberg](https://codeberg.org/jdwhite/pkgsrc-darwin).
+
+---
+
 pkgsrc-darwin
 =============
 This repository contains documentation, support files, and troubleshooting tips for using the [pkgsrc](http://pkgsrc.org) package management system under OS X/macOS version 10.8 and later.
